@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Streaming Control</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Live Streaming Control</h1>
+
+        <!-- Form untuk mengunduh video -->
+        <h2>Download Video</h2>
+        <form action="/download_video" method="POST">
+            <input type="text" name="file_id" placeholder="Enter Google Drive File ID" required>
+            <button type="submit">Download Video</button>
+        </form>
+
+        <!-- Form untuk mulai streaming -->
+        <h2>Start Stream</h2>
+        <form action="/start_stream" method="POST">
+            <label for="video_file">Select Video File</label>
+            <select name="video_file" required>
+                {% for file in video_files %}
+                    <option value="{{ file }}">{{ file }}</option>
+                {% endfor %}
+            </select>
+            <input type="text" name="stream_key" placeholder="Enter Stream Key" required>
+            <button type="submit">Start Stream</button>
+        </form>
+
+        <!-- Form untuk menghentikan sesi -->
+        <h2>Stop Stream</h2>
+        <form action="/stop_session" method="POST">
+            <label for="session_name">Select Active Session</label>
+            <select name="session_name" required>
+                {% for session in tmux_sessions %}
+                    <option value="{{ session.split(':')[0] }}">{{ session.split(':')[0] }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit">Stop Session</button>
+        </form>
+
+        <!-- Pesan -->
+        {% if message %}
+            <div class="message">{{ message }}</div>
+        {% endif %}
+    </div>
+</body>
+</html>
